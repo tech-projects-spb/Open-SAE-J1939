@@ -10,6 +10,8 @@
 /* Layers */
 #include "../ISO_11783/ISO_11783-7_Application_Layer/Application_Layer.h"
 #include "../Hardware/Hardware.h"
+#include "bldc_j1939.h"
+#include "j1939_helper.h"
 
 /* This function should be called all the time, or be placed inside an interrupt listener */
 bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
@@ -76,6 +78,10 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 		else if (id0 == 0x0 && id1 == 0x2 && (DA == j1939->information_this_ECU.this_ECU_address || DA == 0xFF))
 			SAE_J1939_Read_Address_Delete(j1939, data);															/* Not a SAE J1939 standard */
 		/* Add more else if statement here */
+
+		else if(((ID >> 16) == (SBLDC_MOTOR_MAX_CURRENT_A_ADDRESS >> 16)) && (DA == j1939->information_this_ECU.this_ECU_address)){
+			sendMotorMaxCurrenrPowerSpeed(data);
+		}
 	}
 	return is_new_message;
 }
