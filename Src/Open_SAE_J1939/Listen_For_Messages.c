@@ -14,7 +14,7 @@
 #include "j1939_helper.h"
 
 /* This function should be called all the time, or be placed inside an interrupt listener */
-bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
+bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939, void *object) {
 	uint32_t ID = 0;
 	uint8_t data[8] = {0};
 	bool is_new_message = CAN_Read_Message(&ID, data);
@@ -81,6 +81,9 @@ bool Open_SAE_J1939_Listen_For_Messages(J1939* j1939) {
 
 		else if(((ID >> 16) == (SBLDC_MOTOR_MAX_CURRENT_A_ADDRESS >> 16)) && (DA == j1939->information_this_ECU.this_ECU_address)){
 			sendMotorMaxCurrenrPowerSpeed(data);
+		}
+		else if(((ID >> 16) == (SBLDC_MOTOR_MODE_ADDRESS >> 16)) && (DA == j1939->information_this_ECU.this_ECU_address)){
+			parceMotorMessage(data, object);
 		}
 	}
 	return is_new_message;
