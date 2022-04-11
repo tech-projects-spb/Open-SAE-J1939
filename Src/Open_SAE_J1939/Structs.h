@@ -52,6 +52,7 @@ struct Name {
 	uint8_t industry_group;							/* Specify the group where this ECU is located - 0 to 7 */
 	uint8_t vehicle_system_instance;				/* Specify the vehicle system number - 0 to 15 */
 	uint8_t from_ecu_address;						/* From which ECU came this message */
+	uint8_t last_from_ecu_adress;					/* Адрес устройства предыдущего принятого сообщения. нужно для смены адреса */
 };
 
 /* PGN: 0x00FECA - Storing the DM1 Active diagnostic trouble codes from the reading process */
